@@ -1,0 +1,129 @@
+<html>
+
+<head>
+	<style type="text/css">
+		html,
+		body {
+			height: 98%;
+			margin: 0px;
+			padding: 0px;
+		}
+
+		.column {
+			width: 19.5%;
+			float: left;
+			height: 100%;
+			margin-left: 3px;
+		}
+
+		.headerText {
+			text-align: center;
+		}
+
+		.taskText {
+			text-align: left;
+			margin-left: 15px;
+		}
+
+		.titleText {
+			text-align: center;
+			color: green;
+		}
+
+		.colDate {
+			color: green;
+			text-align: center;
+		}
+	</style>
+	<meta charset="UTF-8">
+</head>
+
+<body>
+
+	<div>
+		<h2 class="titleText">Week tasks regestry!</h2>
+	</div>
+	<div>
+		<div class="column" style="background-color:#aaa;">
+			<h2 class="headerText">Segunda</h2>
+			<span id="col1Date" class="colDate"></span>
+			<ul id="col1Tasks"></ul>
+		</div>
+		<div class="column" style="background-color:#bbb;">
+			<h2 class="headerText">Terça</h2>
+			<span id="col2Date" class="colDate"></span>
+			<ul id="col2Tasks"></ul>
+		</div>
+		<div class="column" style="background-color:#ccc;">
+			<h2 class="headerText">Quarta</h2>
+			<span id="col3Date" class="colDate"></span>
+			<ul id="col3Tasks"></ul>
+		</div>
+		<div class="column" style="background-color:#ddd;">
+			<h2 class="headerText">Quinta</h2>
+			<span id="col4Date" class="colDate"></span>
+			<ul id="col4Tasks"></ul>
+		</div>
+		<div class="column" style="background-color:#eee;">
+			<h2 class="headerText">Sexta</h2>
+			<span id="col5Date" class="colDate"></span>
+			<ul id="col5Tasks"></ul>
+		</div>
+	</div>
+
+	<script>
+		const electron = require('electron');
+		const fs = require('fs');
+
+		const column1Tasks = document.getElementById('col1Tasks');
+		const column2Tasks = document.getElementById('col2Tasks');
+		const column3Tasks = document.getElementById('col3Tasks');
+		const column4Tasks = document.getElementById('col4Tasks');
+		const column5Tasks = document.getElementById('col5Tasks');
+
+		const column1Date = document.getElementById('col1Date');
+		const column2Date = document.getElementById('col2Date');
+		const column3Date = document.getElementById('col3Date');
+		const column4Date = document.getElementById('col4Date');
+		const column5Date = document.getElementById('col5Date');
+
+		addTasksText(column1Tasks, column1Date, '1_DayOfTheWeek_Tasks.txt')
+		addTasksText(column2Tasks, column2Date, '2_DayOfTheWeek_Tasks.txt')
+		addTasksText(column3Tasks, column3Date, '3_DayOfTheWeek_Tasks.txt')
+		addTasksText(column4Tasks, column4Date, '4_DayOfTheWeek_Tasks.txt')
+		addTasksText(column5Tasks, column5Date, '5_DayOfTheWeek_Tasks.txt')
+
+		function addTasksText(columnnumber, columndate, dayoftheweek) {
+			var count = 0;
+			try {
+				var myDirectorie = process.cwd() + '\\myFiles';
+				var myFile = myDirectorie + '\\' + dayoftheweek;
+				fs.readFileSync(myFile, 'utf-8').split(/\r?\n/).forEach(function (line) {
+					if (count == 0) {
+						const hRegTasks0 = document.createElement("h3");
+						const itemRegTasksText0 = document.createTextNode(line);
+						hRegTasks0.appendChild(itemRegTasksText0);
+						columndate.appendChild(hRegTasks0);
+						count = count + 1;
+					} else {
+						const liRegTasks = document.createElement('li');
+						liRegTasks.className = 'liRegTask';
+						liRegTasks.id = 'listTask'
+
+						const hRegTasks = document.createElement("font");
+						hRegTasks.id = "itemTextRegTasks";
+						hRegTasks.size = "2";
+
+						const itemRegTasksText = document.createTextNode(line);
+
+						hRegTasks.appendChild(itemRegTasksText);
+						liRegTasks.appendChild(hRegTasks);
+						columnnumber.appendChild(liRegTasks);
+					}
+				});
+			} catch (err) { }
+		}
+	</script>
+</body>
+
+</html>

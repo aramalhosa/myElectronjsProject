@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Save data in file
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+
+<body>
+    <div class='container'>
+        <form id="firstForm">
+            <div>
+                <label> Enter the text for the new link </label>
+                <input type="text" id="item" autofocus>
+                <br><br>
+                <label> Enter the new link </label>
+                <input type="text" id="item1" autofocus>
+                <br><br>
+                <label> Define the class of the new link </label>
+                <br>
+                <form action="#">
+                    <p>
+                        <label>
+                            <input id="JiraLinks" class="with-gap" name="group1" type="radio" checked />
+                            <span>Jira</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input id="ConfluenceLinks" class="with-gap" name="group1" type="radio" />
+                            <span>Confluence</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input id="DocVidaLinks" class="with-gap" name="group1" type="radio" />
+                            <span>Documentos Vida</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input id="DocComumLinks" class="with-gap" name="group1" type="radio" />
+                            <span>Documentos Comum</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input id="DocOutrosLinks" class="with-gap" name="group1" type="radio" />
+                            <span>Documento Outros</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input id="ManuaisLinks" class="with-gap" name="group1" type="radio" />
+                            <span>Manuais</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input id="ApresentacoesLinks" class="with-gap" name="group1" type="radio" />
+                            <span>Apresentações</span>
+                        </label>
+                    </p>
+                </form>
+                <p id="demo"></p>
+            </div>
+            <br><br>
+            <button class='btn waves-effect waves-light' id='myBtn'> Save </button>
+        </form>
+    </div>
+    <script>
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+
+        document.getElementById("myBtn").addEventListener("click", function () {
+            document.getElementById("demo").innerHTML = "Hello World";
+            submitForm();
+        });
+
+        function submitForm() {
+
+            const item = document.querySelector('#item').value;
+            const item1 = document.querySelector('#item1').value;
+
+            var radioButtons = document.getElementsByName("group1");
+            for (var i = 0; i < radioButtons.length; i++) {
+                if (radioButtons[i].checked) {
+                    var classification = radioButtons[i].id;
+                }
+            }
+
+            ipcRenderer.send('item:createNewLink', item, item1, classification);
+        }
+    </script>
+</body>
+
+</html>

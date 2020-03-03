@@ -1,0 +1,1 @@
+<pre id="sourceText" contenteditable="true">This is an test!&lt;div&gt;This is the second line of the test!&lt;/div&gt;&lt;div&gt;This is the third line of the test!&lt;/div&gt;</pre>

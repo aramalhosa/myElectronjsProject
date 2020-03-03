@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Save data in file
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+
+<body>
+    <div class='container'>
+        <form>
+            <div>
+                <div class="input-field col s6">
+                    <input type="time" id="myTime" name="myTime" min="07:00" max="23:00" autofocus required>
+                    <label class="active" for="myTime">Task Time</label>
+                </div>
+                <div class="input-field col s6">
+                    <input type="text" id="item" autofocus>
+                    <label class="active" for="item">Task Text</label>
+                </div>
+            </div>
+            <button class='btn waves-effect waves-light' type="submit"> Save </button>
+        </form>
+    </div>
+    <script>
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+
+        var d = new Date();
+        var hour = d.getHours();
+        var minute = d.getMinutes();
+        var timeText = hour + ":" + minute;
+        var textTask = "";
+
+
+        ipcRenderer.on('item:newTaskText', function (e, item) {
+            document.getElementById("item").defaultValue = item;
+        })
+
+        document.getElementById("myTime").value = timeText;
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', submitForm);
+
+        function submitForm(e) {
+            e.preventDefault();
+            const timeItem = document.getElementById("myTime").value;
+            const item = document.querySelector('#item').value;
+            ipcRenderer.send('item:createNewTask', timeItem + " - " + item);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Save data in file
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        .txtArea {
+            float: left;
+            height: 520px;
+            resize: none;
+            overflow: auto;
+            font-size: 12px;
+            margin-bottom: 10px;
+            color: white;
+            background-color: rgba(17, 1, 1, 0.781);
+        }
+
+        .divText {
+            height: 540px;
+            border-style: outset;
+            overflow: auto;
+            font-size: 12px;
+            padding: 6px;
+            color: white;
+            background-color: rgba(17, 1, 1, 0.781);
+        }
+
+        .button {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 12px 28px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 4px 2px;
+            -webkit-transition-duration: 0.4s;
+            /* Safari */
+            transition-duration: 0.4s;
+            cursor: pointer;
+        }
+        .button1 {
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50;
+        }
+
+        .button1:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='container'>
+        <form id="firstForm">
+            <div>
+                <label> Enter the text in the note </label> <label id="noteIdLabel"></label>
+            </div>
+            <div>
+                <div id="myTxtArea" class="divText" contenteditable="true" tabindex="0"></div>
+            </div>
+            <div>
+                <input id="myButton" type="button" class="button button1" onclick="save()" value="Click Me!">
+            </div>
+        </form>
+    </div>
+    <script>
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+
+        ipcRenderer.on('item:add', function (e, item) {
+            document.getElementById('noteIdLabel').innerText = item;
+        });
+
+        window.addEventListener('focus', () => theWebViewElement.focus())
+
+        function save() {
+            //document.getElementById('myTxtArea').isContentEditable;
+            alert('Hello World! ');
+        }
+    </script>
+</body>
+
+</html>

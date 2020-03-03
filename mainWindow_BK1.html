@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AJR Electron App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        html,
+        body {
+            height: 100vh;
+            margin: 0px;
+        }
+
+        .tasksTitle {
+            text-align: center;
+            color: darkslategrey;
+            font-size: 20px;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .liRegTask {
+            text-align: left;
+            color: darkgreen;
+            font-style: italic;
+            margin-left: 10px;
+        }
+
+        .columnLinks {
+            float: left;
+            text-align: center;
+            width: 5%;
+            height: 90%;
+            padding: 5px;
+            background-color: gray;
+        }
+
+        .column {
+            float: left;
+            width: 65%;
+            height: 90%;
+            padding: 5px;
+        }
+
+        .column1 {
+            height: 90%;
+            overflow: auto;
+        }
+
+        .columnTasks {
+            float: left;
+            width: 30%;
+            height: 80%;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            padding: 1px;
+            border: 1px solid lightcyan;
+            border-radius: 12px;
+            background-color: lightgray;
+            text-align: center;
+            vertical-align: bottom;
+            overflow: auto;
+        }
+
+        .columnBottom {
+            width: 20%;
+            float: right;
+        }
+
+        .columnBottom1 {
+            float: left;
+            width: 30%;
+        }
+
+        .myTasksButton {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            border-radius: 12px;
+            color: white;
+            padding: 10px 26px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 15px;
+            margin-bottom: 10px;
+            -webkit-transition-duration: 0.4s;
+            /* Safari */
+            transition-duration: 0.4s;
+        }
+
+        .button1 {
+            background-color: #4CAF50;
+            color: white;
+            border: 2px solid #4CAF50;
+        }
+
+        .button1:hover {
+            background-color: white;
+            color: black;
+        }
+
+        .material-icons {
+            font-size: 48px;
+            color: darkgreen;
+        }
+
+
+        .material-icons:hover {
+            font-size: 48px;
+            color: white;
+        }
+
+        .tasksColumnLeft {
+            float: left;
+            width: 30%;
+            height: 90%;
+            padding: 5px;
+        }
+
+        .tasksColumnLeft1 {
+            height: 90%;
+            overflow: auto;
+        }
+
+        .linksColumnTypes {
+            float: left;
+            width: 20%;
+            height: 90%;
+            background-color: lightgray;
+        }
+
+        .linksTypes {
+            margin-top: 0px;
+        }
+
+        .linksTypes1 {
+            background-color: lightgray;
+        }
+
+        .linksTypes1:hover {
+            background-color: gray;
+        }
+
+        .linksTypes1:active {
+            background-color: darkgrey;
+        }
+
+        .linksTypes1Text {
+            margin-left: 12px;
+            font-size: 22px;
+            color: darkgreen;
+        }
+
+        .linksColumnList {
+            float: left;
+            height: 90%;
+            width: 75%;
+            padding: 5px;
+        }
+
+
+        .linksColumnList1 {
+            height: 90%;
+            overflow: auto;
+        }
+
+        .notesColumn {
+            float: left;
+            width: 95%;
+            height: 90%;
+            padding: 5px;
+        }
+
+        .notesText {
+            float: left;
+            border: 2px solid;
+            margin-left: 16px;
+            margin-top: 35px;
+            padding: 70px;
+            width: 30%;
+            height: 35%;
+            font-size: 18px;
+            color: whitesmoke;
+            background-color: rgb(54, 52, 52);
+            overflow: auto;
+            text-align: center;
+        }
+
+        .notesText:hover {
+            float: left;
+            border: 2px solid;
+            margin-left: 16px;
+            margin-top: 35px;
+            padding: 20px;
+            width: 30%;
+            height: 35%;
+            font-size: 9px;
+            color: white;
+            background-color: rgb(26, 24, 24);
+            overflow: scroll;
+            text-align: left;
+        }
+
+        /* Clearfix (clear floats)  
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }*/
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-wrapper">
+            <a id="topText" class="brand-logo center">Tasks Registration</a>
+        </div>
+    </nav>
+
+    <div class="columnLinks">
+        <a href="#" onclick="tasksActionBtn()"> <i class="material-icons">alarm</i></a>
+        <a href="#" onclick="tipsActionBtn()"><i class="material-icons" click>event_note</i></a>
+        <a href="#" onclick="linksActionBtn()"><i class="material-icons" click>attachment</i></a>
+        <a href="#" onclick="notesActionBtn()"><i class="material-icons" click>create</i></a>
+    </div>
+
+    <div id="tasks_columnTasks" class="column">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for tasks..." title="Type in a task">
+        <div class="column1">
+            <ul id="myUL"></ul>
+        </div>
+    </div>
+
+    <div id="tasks_columnRegTasks" class="columnTasks">
+        <div>
+            <span class="tasksTitle">Registed Tasks</span>
+            <ul id="registedTasksUL"></ul>
+        </div>
+    </div>
+
+    <div id="tasks_buttonsBottom" class="columnBottom">
+        <button id='newTaskButton' class='myTasksButton button1'>New</button>
+        <button id='saveTasksButton' class='myTasksButton button1'>Save</button>
+    </div>
+
+    <div id="tips_columnTips" class="tasksColumnLeft" style="display: none;">
+        <input type="text" id="myTipsInput" onkeyup="myTipsFunction()" placeholder="Search for tips..."
+            title="Type in a tip">
+        <div class="tasksColumnLeft1">
+            <ul id="myTipsUL"></ul>
+        </div>
+    </div>
+
+    <div id="links_columnTypes" class="linksColumnTypes" style="display: none;">
+        <ul id="myLinksTypesUL" class="linksTypes">
+            <a href="#" onclick="linksJira()">
+                <li class="linksTypes1"><label class="linksTypes1Text">Jira</label></li>
+            </a>
+            <a href="#" onclick="linksConfluence()">
+                <li class="linksTypes1"><label class="linksTypes1Text">Confluence</label></li>
+            </a>
+            <a href="#" onclick="linksDocsVida()">
+                <li class="linksTypes1"><label class="linksTypes1Text">Documentos Vida</label></li>
+            </a>
+            <a href="#" onclick="linksDocsComum()">
+                <li class="linksTypes1"><label class="linksTypes1Text">Documentos Comum</label></li>
+            </a>
+            <a href="#" onclick="linksDocsOutros()">
+                <li class="linksTypes1"><label class="linksTypes1Text">Documentos Outros</label></li>
+            </a>
+            <a href="#" onclick="linksManuais()">
+                <li class="linksTypes1"><label class="linksTypes1Text">Manuais</label></li>
+            </a>
+            <a href="#" onclick="linksApresentacoes()">
+                <li class="linksTypes1"><label class="linksTypes1Text">Apresentações</label></li>
+            </a>
+        </ul>
+    </div>
+
+    <div id="links_columnList" class="linksColumnList" style="display: none;">
+        <input type="text" id="myLinksInput" onkeyup="myLinksFunction()" placeholder="Search for links..."
+            title="Type in a link">
+        <div class="linksColumnList1">
+            <ul id="myLinksUL"></ul>
+        </div>
+    </div>
+
+    <div id="notes_column" class="notesColumn" style="display: none;">
+    </div>
+
+    <script>
+        const electron = require('electron');
+        const fs = require('fs');
+        const path = require('path');
+
+        const { ipcRenderer, shell } = electron;
+        const ul = document.getElementById('myUL');
+        const btnSaveTasks = document.getElementById('saveTasksButton');
+        const btnNewTask = document.getElementById('newTaskButton');
+        const ulRegTasks = document.getElementById('registedTasksUL');
+        const ulRegLinks = document.getElementById('myLinksUL');
+        const notesColumn = document.getElementById('notes_column');
+
+        //document.getElementById("tips_columnTips").style.display = "none";
+
+        var linesCounter = 0;
+
+        ipcRenderer.send('item:loadinit', 'DefaultTasks');
+        var d = new Date();
+        var fileName = d.getDay() + "_DayOfTheWeek_Tasks.txt";
+        ipcRenderer.send('item:loadRegTasks', fileName);
+
+        //Add item
+        ipcRenderer.on('item:add', function (e, item) {
+
+            linesCounter = linesCounter + 1;
+
+            ul.className = 'collection';
+            const li = document.createElement('li');
+            li.className = 'collection-item';
+            li.id = 'listTask'
+
+            //const a = document.createElement('a');
+            //a.href = '#';
+
+            const h = document.createElement("H6");
+            h.id = "itemText" + linesCounter;
+            const itemText = document.createTextNode(item);
+
+            const registDelBtn = document.createElement('button');
+            registDelBtn.innerHTML = 'Del';
+            registDelBtn.className = 'btn-small waves-effect waves-light right';
+            registDelBtn.id = 'delButton' + linesCounter;
+            li.appendChild(registDelBtn);
+
+            const spaceBetweenButtons = document.createElement('a');
+            spaceBetweenButtons.innerHTML = '...';
+            spaceBetweenButtons.style = 'color:white';
+            spaceBetweenButtons.className = 'right';
+            li.appendChild(spaceBetweenButtons);
+
+            const registNewBtn = document.createElement('button');
+            registNewBtn.innerHTML = 'New';
+            registNewBtn.className = 'btn-small waves-effect waves-light right';
+            registNewBtn.id = 'newButton' + linesCounter;
+            li.appendChild(registNewBtn);
+
+            const spaceBetweenButtons1 = document.createElement('a');
+            spaceBetweenButtons1.innerHTML = '...';
+            spaceBetweenButtons1.style = 'color:white';
+            spaceBetweenButtons1.className = 'right';
+            li.appendChild(spaceBetweenButtons1);
+
+            const registInitBtn = document.createElement('button');
+            registInitBtn.innerHTML = 'Init';
+            registInitBtn.className = 'btn-small waves-effect waves-light right';
+            registInitBtn.id = 'iniButton' + linesCounter;
+            //registInitBtn.type = 'submit';
+            li.appendChild(registInitBtn);
+
+            h.appendChild(itemText);
+            li.appendChild(h);
+            ul.appendChild(li);
+        });
+
+        ipcRenderer.on('item:addRegTask', function (e, item) {
+            ulRegTasks.className = 'collection';
+
+            const liRegTasks = document.createElement('li');
+            liRegTasks.className = 'liRegTask';
+            liRegTasks.id = 'listTask'
+
+            const hRegTasks = document.createElement("font");
+            hRegTasks.id = "itemTextRegTasks";
+            hRegTasks.size = "2";
+
+            const itemRegTasksText = document.createTextNode(item);
+
+            hRegTasks.appendChild(itemRegTasksText);
+            liRegTasks.appendChild(hRegTasks);
+            ulRegTasks.appendChild(liRegTasks);
+        });
+
+        ipcRenderer.on('item:save', function (e, item) {
+
+            var content = "";
+
+            var i, liSave, linha;
+            liSave = ul.getElementsByTagName("li");
+            for (i = 0; i < liSave.length; i++) {
+                linha = liSave[i].getElementsByTagName("H6")[0].innerText;
+                if (i == 0) {
+                    content = linha;
+                } else {
+                    content = content + "\r\n" + linha;
+                }
+            }
+
+            item = process.cwd() + '\\myFiles\\' + item + ".txt";
+
+            fs.writeFile(item, content, function (err) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                console.log('Dados foram gravados no ficheiro ' + item + '!');
+            });
+        });
+
+        ipcRenderer.on('item:saveReg', function (e, item) {
+
+            var content = "";
+
+            var i, liSave, linha;
+            liSave = ulRegTasks.getElementsByTagName("li");
+            for (i = 0; i < liSave.length; i++) {
+                linha = liSave[i].getElementsByTagName("font")[0].innerText;
+                if (i == 0) {
+                    content = linha;
+                } else {
+                    content = content + "\r\n" + linha;
+                }
+            }
+            item = process.cwd() + '\\myFiles\\' + item + ".txt";
+
+            fs.writeFile(item, content, function (err) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                console.log('Dados foram gravados no ficheiro ' + item + '!');
+            });
+        });
+
+        ipcRenderer.on('item:cleanReg', function (e, item) {
+
+            ulRegTasks.innerHTML = "";
+
+        });
+
+
+        //const form = document.querySelector('form');
+        //form.addEventListener('submit', submitForm);
+
+
+        //function submitForm(e) {
+        //e.preventDefault();
+        //    alert("passei aqui!" + e.target.nodeName);
+        //}
+
+        //Clear items
+        ipcRenderer.on('item:clear', function (e, item) {
+            ul.innerHTML = '';
+            ul.className = '';
+        });
+
+        // Remove item
+        ulRegTasks.addEventListener('dblclick', removeItem);
+
+        function removeItem(e) {
+            //alert('Target:' + e.target.nodeName);
+
+            if (e.target.nodeName == 'LI') {
+                e.target.remove();
+
+            } else {
+                if (e.target.nodeName == 'font') {
+                    e.target.parentNode.remove();
+                }
+            }
+
+            if (ulRegTasks.children.length == 0) {
+                ulRegTasks.className = '';
+            }
+        }
+
+        ul.addEventListener('click', buttonsControl);
+        btnSaveTasks.addEventListener('click', buttonsControl);
+        btnNewTask.addEventListener('click', buttonsControl);
+
+        function buttonsControl(e) {
+
+            if (e.target.id.substring(0, 9) == "newButton") {
+                var tmpId = "itemText" + e.target.id.substring(9, 11)
+                var textTask = document.getElementById(tmpId).textContent;
+                ipcRenderer.send('item:showNewTaskWindow', textTask);
+            }
+
+            if (e.target.id.substring(0, 9) == "iniButton") {
+
+                var tmpId = "itemText" + e.target.id.substring(9, 11);
+                var date = new Date();
+                var hour = date.getHours();
+                var minute = date.getMinutes();
+                //alert("E  o valor do texto de é " + hour + ":" + minute + "-" + document.getElementById(tmpId).textContent);
+
+                ulRegTasks.className = 'collection';
+
+                const liRegTasks = document.createElement('li');
+                liRegTasks.className = 'liRegTask';
+                liRegTasks.id = 'listTask'
+
+                const hRegTasks = document.createElement("font");
+                hRegTasks.size = "2";
+
+                var textTask = "";
+                if (minute < 10) {
+                    textTask = hour + ":0" + minute + " - " + document.getElementById(tmpId).textContent;
+                } else {
+                    textTask = hour + ":" + minute + " - " + document.getElementById(tmpId).textContent;
+                }
+                const itemRegTasksText = document.createTextNode(textTask);
+
+                hRegTasks.appendChild(itemRegTasksText);
+                liRegTasks.appendChild(hRegTasks);
+                ulRegTasks.appendChild(liRegTasks);
+            }
+
+            if (e.target.id.substring(0, 9) == "delButton") {
+                e.target.parentNode.remove();
+                if (ul.children.length == 0) {
+                    ul.className = '';
+                }
+            }
+
+            if (e.target.id == "saveTasksButton") {
+
+                var d = new Date();
+                var nomeFx = d.getDay() + "_DayOfTheWeek_Tasks";
+
+                ipcRenderer.send('item:saveReg', nomeFx);
+
+                alert("Tarefas registadas no ficheiro " + nomeFx + "!");
+            }
+
+            if (e.target.id == "newTaskButton") {
+                ipcRenderer.send('item:showNewTaskWindow', '');
+            }
+        }
+
+        function myFunction() {
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("myUL");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("H6")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+        function tasksActionBtn() {
+
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Tasks Registration';
+
+            document.getElementById("tasks_columnTasks").style.display = "block";
+
+            document.getElementById("tasks_columnRegTasks").style.display = "block";
+
+            document.getElementById("tasks_buttonsBottom").style.display = "block";
+
+            document.getElementById("links_columnTypes").style.display = "none";
+
+            document.getElementById("links_columnList").style.display = "none";
+
+            document.getElementById("tips_columnTips").style.display = "none";
+
+            document.getElementById("notes_column").style.display = "none";
+
+        }
+
+        /* ============================================================ */
+        /* ======================= Tips Logic ======================== */
+        /* ============================================================ */
+
+        function tipsActionBtn() {
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Tips';
+
+            document.getElementById("tasks_columnTasks").style.display = "none"
+
+            document.getElementById("tasks_columnRegTasks").style.display = "none";
+
+            document.getElementById("tasks_buttonsBottom").style.display = "none";
+
+            document.getElementById("links_columnTypes").style.display = "none";
+
+            document.getElementById("links_columnList").style.display = "none";
+
+            document.getElementById("tips_columnTips").style.display = "block";
+
+            document.getElementById("notes_column").style.display = "none";
+
+        }
+
+        /* ============================================================ */
+        /* ======================= Links Logic ======================== */
+        /* ============================================================ */
+
+        function linksActionBtn() {
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Links';
+
+            ulRegLinks.innerHTML = '';
+            ulRegLinks.className = '';
+
+            document.getElementById("tasks_columnTasks").style.display = "none"
+
+            document.getElementById("tasks_columnRegTasks").style.display = "none";
+
+            document.getElementById("tasks_buttonsBottom").style.display = "none";
+
+            document.getElementById("tips_columnTips").style.display = "none";
+
+            document.getElementById("notes_column").style.display = "none";
+
+            document.getElementById("links_columnTypes").style.display = "block";
+
+            document.getElementById("links_columnList").style.display = "block";
+
+        }
+
+        function linksJira() {
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Links : Jira';
+            document.getElementById("myLinksInput").value = '';
+            ipcRenderer.send('item:getLinksFromFile', 'JiraLinks.txt');
+        }
+
+        function linksConfluence() {
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Links : Confluence';
+            document.getElementById("myLinksInput").value = '';
+            ipcRenderer.send('item:getLinksFromFile', 'ConfluenceLinks.txt');
+        }
+
+        function linksDocsVida() {
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Links : Doc\'s Vida';
+            document.getElementById("myLinksInput").value = '';
+            ipcRenderer.send('item:getLinksFromFile', 'DocVidaLinks.txt');
+        }
+
+        function linksDocsComum() {
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Links : Doc\'s Comum';
+            document.getElementById("myLinksInput").value = '';
+            ipcRenderer.send('item:getLinksFromFile', 'DocComumLinks.txt');
+        }
+
+        function linksDocsOutros() {
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Links : Doc\'s Outros';
+            document.getElementById("myLinksInput").value = '';
+            ipcRenderer.send('item:getLinksFromFile', 'DocOutrosLinks.txt');
+        }
+
+        function linksManuais() {
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Links : Manuais';
+            document.getElementById("myLinksInput").value = '';
+            ipcRenderer.send('item:getLinksFromFile', 'ManuaisLinks.txt');
+        }
+
+        function linksApresentacoes() {
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Links : Apresentacoes';
+            document.getElementById("myLinksInput").value = '';
+            ipcRenderer.send('item:getLinksFromFile', 'ApresentacoesLinks.txt');
+        }
+
+        ipcRenderer.on('item:cleanLinkWindow', function (e) {
+            ulRegLinks.innerHTML = '';
+            ulRegLinks.className = '';
+            document.getElementById("myLinksInput").innerHTML = '';
+        });
+
+        ipcRenderer.on('item:saveLinks', function (e) {
+
+            var topText = document.getElementById("topText");
+
+            if (topText.innerHTML == 'Links : Jira' ||
+                topText.innerHTML == 'Links : Confluence' ||
+                topText.innerHTML == 'Links : Doc\'s Vida' ||
+                topText.innerHTML == 'Links : Doc\'s Comum' ||
+                topText.innerHTML == 'Links : Doc\'s Outros' ||
+                topText.innerHTML == 'Links : Manuais' ||
+                topText.innerHTML == 'Links : Apresentacoes') {
+
+                var i, liSave, linha, linhaid, content, item;
+
+                liSave = ulRegLinks.getElementsByTagName("li");
+                for (i = 0; i < liSave.length; i++) {
+                    linha = liSave[i].getElementsByTagName("H6")[0].innerText;
+                    linhaId = liSave[i].id;
+                    if (i == 0) {
+                        content = linha + '#' + linhaId + "\r\n";
+                    } else {
+                        content = content + linha + '#' + linhaId + "\r\n";
+                    }
+                }
+
+                if (topText.innerHTML == 'Links : Jira') { item = 'JiraLinks.txt'; }
+                if (topText.innerHTML == 'Links : Confluence') { item = 'ConfluenceLinks.txt'; }
+                if (topText.innerHTML == 'Links : Doc\'s Vida') { item = 'DocVidaLinks.txt'; }
+                if (topText.innerHTML == 'Links : Doc\'s Comum') { item = 'DocComumLinks.txt'; }
+                if (topText.innerHTML == 'Links : Doc\'s Outros') { item = 'DocOutrosLinks.txt'; }
+                if (topText.innerHTML == 'Links : Manuais') { item = 'ManuaisLinks.txt'; }
+                if (topText.innerHTML == 'Links : Apresentacoes') { item = 'ApresentacoesLinks.txt'; }
+
+                item = process.cwd() + '\\myFiles\\' + item;
+
+                fs.writeFile(item, content, function (err) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    alert('Dados foram gravados no ficheiro ' + item + '!');
+                });
+
+            }
+        });
+
+        ipcRenderer.on('item:addLinkWindow', function (e, item) {
+
+            ulRegLinks.className = 'collection';
+
+            var items = item.split('#');
+
+            const liRegLinks = document.createElement('li');
+            liRegLinks.className = 'collection-item';
+            liRegLinks.id = items[1];
+
+            //const aRegLinks = document.createElement("a");
+            //aRegLinks.href = items[1];
+
+            const h = document.createElement("H6");
+
+            const itemRegTasksText = document.createTextNode(items[0]);
+
+
+            const registLinkBtn = document.createElement('button');
+            registLinkBtn.innerHTML = 'Link';
+            registLinkBtn.className = 'btn-small waves-effect waves-light right';
+            registLinkBtn.id = 'newButton' + linesCounter;
+            registLinkBtn.onclick = function () {
+                shell.openExternal(items[1]);
+                return false;
+            };
+            liRegLinks.appendChild(registLinkBtn);
+
+            const spaceBetweenButtons = document.createElement('a');
+            spaceBetweenButtons.innerHTML = '...';
+            spaceBetweenButtons.style = 'color:white';
+            spaceBetweenButtons.className = 'right';
+            liRegLinks.appendChild(spaceBetweenButtons);
+
+            const registDelBtn = document.createElement('button');
+            registDelBtn.innerHTML = 'Del';
+            registDelBtn.className = 'btn-small waves-effect waves-light right';
+            registDelBtn.id = 'delButton';
+            registDelBtn.onclick = function () {
+                registDelBtn.parentNode.remove();
+                if (ulRegLinks.children.length == 0) {
+                    ulRegLinks.className = '';
+                }
+                return false;
+            };
+
+            liRegLinks.appendChild(registDelBtn);
+
+            h.appendChild(itemRegTasksText);
+            //aRegLinks.appendChild(hRegLinks);
+            liRegLinks.appendChild(h);
+            ulRegLinks.appendChild(liRegLinks);
+        });
+
+        function myLinksFunction() {
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById("myLinksInput");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("myLinksUL");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("H6")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+
+        /* ============================================================ */
+        /* ======================= Notes Logic ======================== */
+        /* ============================================================ */
+
+        function notesActionBtn() {
+            var topText = document.getElementById("topText");
+            topText.innerHTML = 'Helpfull Notes';
+
+            document.getElementById("tasks_columnTasks").style.display = "none"
+
+            document.getElementById("tasks_columnRegTasks").style.display = "none";
+
+            document.getElementById("tasks_buttonsBottom").style.display = "none";
+
+            document.getElementById("links_columnTypes").style.display = "none";
+
+            document.getElementById("links_columnList").style.display = "none";
+
+            document.getElementById("tips_columnTips").style.display = "none";
+
+            document.getElementById("notes_column").style.display = "block";
+
+            var myDirectorie = process.cwd() + '\\myFiles\\myNotes';
+
+            notesColumn.innerHTML = '';
+
+            fs.readdir(myDirectorie, function (err, dir) {
+
+                for (var i = 0; i < dir.length; i++) {
+
+                    var myFileName = dir[i];
+                    var filePath = myDirectorie + '\\' + myFileName;
+
+                    try {
+
+                        const data = fs.readFileSync(filePath, 'utf8');
+
+                        var notesColumnDiv = document.createElement('div');
+                        notesColumnDiv.innerHTML = myFileName;
+                        notesColumnDiv.id = myFileName;
+                        notesColumnDiv.className = "notesText";
+                        notesColumnDiv.texto1=data;
+
+                        notesColumnDiv.ondblclick = function () {
+                            var myId = this.id;
+                            var n = myId.indexOf('.');
+                            var myId2 = myId.substr(0, n);
+                            ipcRenderer.send('item:openOldNote', myId2);
+                        };
+
+                        notesColumnDiv.onmouseover = function() {
+                            document.getElementById(this.id).innerHTML = this.texto1;
+                        }
+
+                        notesColumnDiv.onmouseleave = function() {
+                            document.getElementById(this.id).innerHTML = this.id;
+                        }
+
+                        notesColumn.appendChild(notesColumnDiv);
+
+                    } catch (err) {
+                        alert("An error ocurred reading the file :" + err.message);
+                    }
+
+
+
+
+                    /* fs.readFile(filePath, 'utf-8', (err, data) => {
+ 
+                         if (err) {
+                             alert("An error ocurred reading the file :" + err.message);
+                             return;
+                         }
+ 
+ 
+                     });*/
+                }
+            });
+
+        }
+
+
+
+    </script>
+</body>
+
+</html>

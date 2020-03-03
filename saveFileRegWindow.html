@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Save data in file
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+
+<body>
+    <div class='container'>
+        <form>
+            <div>
+                <label> Enter file name </label>
+                <input type="text" id="item" autofocus>
+            </div>
+            <button class='btn waves-effect waves-light' type="submit"> Save </button>
+        </form>
+    </div>
+    <script>
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+
+        var d = new Date();
+        document.getElementById("item").defaultValue = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate() + "_Tasks";
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', submitForm);
+
+        function submitForm(e) {
+            e.preventDefault();
+            const item = document.querySelector('#item').value;
+            ipcRenderer.send('item:saveRegClose', item);
+        }
+    </script>
+</body>
+
+</html>
