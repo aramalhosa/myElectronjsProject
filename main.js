@@ -462,7 +462,7 @@ function deleteTip() {
     //Create new window
     deleteTipWindow = new BrowserWindow({
         width: 500,
-        height: 200,
+        height: 170,
         title: 'Delete tip',
         webPreferences: {
             nodeIntegration: true
@@ -482,13 +482,44 @@ function deleteTip() {
     deleteTipWindow.on('close', function () {
         deleteTippWindow = null;
     });
+
+    deleteTipWindow.webContents.once('dom-ready', () => {
+        deleteTipWindow.webContents.send('item:passInfoToDelete', 'xxx');
+    })
+
 }
 
 ipcMain.on('item:deleteTip', function (e, item) {
 
     deleteTip();
 
-})    
+})
+
+ipcMain.on('item:deleteTipConfirm', function (e, item) {
+
+    deleteTipWindow.close();
+
+})
+
+ipcMain.on('item:deleteTipAbort', function (e, item) {
+
+    deleteTipWindow.close();
+
+})
+
+var deleteFolderRecursive = function (path) {
+    if (fs.existsSync(path)) {
+        fs.readdirSync(path).forEach(function (file, index) {
+            var curPath = path + "/" + file;
+            if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+};
 
 // -------------------------------------------- //
 // ---------- Links Section ------------------- //

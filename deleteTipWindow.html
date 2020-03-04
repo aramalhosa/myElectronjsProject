@@ -20,6 +20,7 @@
                 <p/>
                 <p>Do you really want to delete this tip?</p>
                 <p/><p/>
+                <label id="xpto"></label>
                 <div>
                     <button class='btn waves-effect waves-light' onclick="confirm()"> Confirm </button>
                     &nbsp;&nbsp;&nbsp;
@@ -31,17 +32,17 @@
     <script>
         const electron = require('electron');
         const { ipcRenderer } = electron;
-
-        const form = document.querySelector('form');
-        form.addEventListener('submit', submitForm);
+        
+        ipcRenderer.on('item:passInfoToDelete', function (e, item) {
+            document.getElementById('xpto').innerText = "ABC";
+        });
 
         function confirm() {
-            alert("Confirm!");
-            /*ipcRenderer.send('item:addNewTip', item);*/
+            ipcRenderer.send('item:deleteTipConfirm', item);
         }
 
         function abort() {
-            /*ipcRenderer.send('item:addNewTip', item);*/
+            ipcRenderer.send('item:deleteTipAbort', '');
         }
     </script>
 </body>
