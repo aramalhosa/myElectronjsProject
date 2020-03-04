@@ -398,7 +398,7 @@ function addNewTip() {
     addNewTipWindow = new BrowserWindow({
         width: 500,
         height: 200,
-        title: 'Add new note',
+        title: 'Add new tip',
         webPreferences: {
             nodeIntegration: true
         }
@@ -457,6 +457,38 @@ ipcMain.on('item:addNewTip', function (e, item) {
     addNewTipWindow.close();
 
 })
+
+function deleteTip() {
+    //Create new window
+    deleteTipWindow = new BrowserWindow({
+        width: 500,
+        height: 200,
+        title: 'Delete tip',
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+
+    deleteTipWindow.removeMenu();
+
+    // Load html into window
+    deleteTipWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'deleteTipWindow.html'),
+        protocol: 'file',
+        slashes: true
+    }));
+
+    // Garbage collection handle
+    deleteTipWindow.on('close', function () {
+        deleteTippWindow = null;
+    });
+}
+
+ipcMain.on('item:deleteTip', function (e, item) {
+
+    deleteTip();
+
+})    
 
 // -------------------------------------------- //
 // ---------- Links Section ------------------- //

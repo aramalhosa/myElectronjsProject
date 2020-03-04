@@ -133,20 +133,20 @@
             float: left;
             width: 70%;
             height: 94%;
-            background-color: rgb(170, 165, 165);
+			padding: 10px;
         }
 
         .tipsColumnRightTop {
             float: top;
             width: 100%;
-            height: 40%;
-            background-color: blue;
+            height: 70%;
+            color: blue;
         }
 
         .tipsColumnRightBottom {
             float: bottom;
             width: 100%;
-            height: 60%;
+            height: 30%;
             background-color: green;
         }
 
@@ -289,9 +289,9 @@
         </div>
 
         <div id="tips_columnTips2" class="tipsColumnRight">
-            <div id="tips_columnTips3" class="tipsColumnRightTop">
+            <div id="tips_columnTips3" class="tipsColumnRightTop" style="display: none;">
             </div>
-            <div id="tips_columnTips4" class="tipsColumnRightBottom">
+            <div id="tips_columnTips4" class="tipsColumnRightBottom" style="display: none;">
             </div>
         </div>
 
@@ -687,7 +687,9 @@
             const aRegTipsB2 = document.createElement('a');
             aRegTipsB2.href = '#';
             aRegTipsB2.onclick = function () {
-                alert("Isto é um exemplo!");
+            
+              ipcRenderer.send('item:deleteTip', '');
+                
             }
             aRegTipsB2.appendChild(liRegTipsB2);
 
@@ -698,7 +700,19 @@
             const aRegTipsB3 = document.createElement('a');
             aRegTipsB3.href = '#';
             aRegTipsB3.onclick = function () {
-                alert("Isto é um exemplo!");
+			
+
+				filePath = process.cwd() + '\\myFiles\\myTips\\' + item + '\\' + item + '_File.txt';
+				
+				// alert("File to read is " + filePath);
+				
+				const data = fs.readFileSync(filePath, 'utf8');
+				
+				// alert("Data in the File is " + data);
+				
+				document.getElementById("tips_columnTips3").innerHTML = data;
+				document.getElementById("tips_columnTips3").style.display = "block";
+
             }
             aRegTipsB3.appendChild(liRegTipsB3);
 
