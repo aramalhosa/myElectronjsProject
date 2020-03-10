@@ -17,10 +17,11 @@
     <div class='container'>
         <form>
             <div class="myDiv">
-                <p/>
+                <p />
                 <p>Do you really want to delete this tip?</p>
-                <p/><p/>
-                <label id="xpto"></label>
+                <p />
+                <p />
+                Tip : <label id="myTip"></label>
                 <div>
                     <button class='btn waves-effect waves-light' onclick="confirm()"> Confirm </button>
                     &nbsp;&nbsp;&nbsp;
@@ -32,17 +33,18 @@
     <script>
         const electron = require('electron');
         const { ipcRenderer } = electron;
-        
-        ipcRenderer.on('item:passInfoToDelete', function (e, item) {
-            document.getElementById('xpto').innerText = "ABC";
+
+        ipcRenderer.on('item:passTipToDelete', function (e, item) {
+            document.getElementById('myTip').innerText = item;
         });
 
         function confirm() {
-            ipcRenderer.send('item:deleteTipConfirm', item);
+            itemSend = document.getElementById('myTip').innerText;
+            ipcRenderer.send('item:deleteTipConfirm', itemSend);
         }
 
         function abort() {
-            ipcRenderer.send('item:deleteTipAbort', '');
+            ipcRenderer.send('item:deleteTipAbort');
         }
     </script>
 </body>

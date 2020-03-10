@@ -439,7 +439,7 @@ ipcMain.on('item:addNewTip', function (e, item) {
             console.log(err);
             return;
         }
-        console.log('Dados foram gravados no ficheiro ' + fileSaveTip + '!');
+        // console.log('Dados foram gravados no ficheiro ' + fileSaveTip + '!');
     });
 
     var content = item + '\r\n';
@@ -449,17 +449,81 @@ ipcMain.on('item:addNewTip', function (e, item) {
             console.log(err);
             return;
         }
-        console.log('Dados foram gravados no ficheiro ' + fileSave + '!');
+        // console.log('Dados foram gravados no ficheiro ' + fileSave + '!');
 
         mainWindow.webContents.send('item:refreshRegTips');
     });
 
+    openNewTip(item);
     addNewTipWindow.close();
 
 })
 
-function deleteTip() {
+function openNewTip(item) {
     //Create new window
+    openTipTextWindow = new BrowserWindow({
+        width: 800,
+        height: 690,
+        title: 'Add new tip',
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+
+    openTipTextWindow.removeMenu();
+
+    // Load html into windowf
+    openTipTextWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'richTipText.html'),
+        protocol: 'file',
+        slashes: true
+    }));
+
+    if (item != "") {
+        openTipTextWindow.webContents.once('dom-ready', () => {
+            openTipTextWindow.webContents.send('item:newTip', item);
+        })
+    }
+
+    // Garbage collection handle
+    openTipTextWindow.on('close', function () {
+        openTipTextWindow = null;
+    });
+}
+
+ipcMain.on('item:openOldTip', function (e, item) {
+    openOldTipTextWindow = new BrowserWindow({
+        width: 800,
+        height: 690,
+        title: 'Add new tip',
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+
+    openOldTipTextWindow.removeMenu();
+
+    // Load html into windowf
+    openOldTipTextWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'richTipText.html'),
+        protocol: 'file',
+        slashes: true
+    }));
+
+    if (item != "") {
+        openOldTipTextWindow.webContents.once('dom-ready', () => {
+            openOldTipTextWindow.webContents.send('item:oldTip', item);
+        })
+    }
+
+    // Garbage collection handle
+    openOldTipTextWindow.on('close', function () {
+        openOldTipTextWindow = null;
+    });
+})
+
+ipcMain.on('item:deleteTip', function (e, item) {
+
     deleteTipWindow = new BrowserWindow({
         width: 500,
         height: 170,
@@ -480,28 +544,48 @@ function deleteTip() {
 
     // Garbage collection handle
     deleteTipWindow.on('close', function () {
-        deleteTippWindow = null;
+        deleteTipWindow = null;
     });
 
     deleteTipWindow.webContents.once('dom-ready', () => {
-        deleteTipWindow.webContents.send('item:passInfoToDelete', 'xxx');
+        deleteTipWindow.webContents.send('item:passTipToDelete', item);
     })
-
-}
-
-ipcMain.on('item:deleteTip', function (e, item) {
-
-    deleteTip();
 
 })
 
 ipcMain.on('item:deleteTipConfirm', function (e, item) {
 
+    var myDirectorie = process.cwd() + '\\myFiles\\myTips';
+    var fileUpdate = myDirectorie + "\\myTipsFile.txt";
+    var myDirectorieTip = myDirectorie + "\\" + item;
+
+    deleteFolderRecursive(myDirectorieTip);
+
+    fs.readFile(fileUpdate, 'utf-8', (err, data) => {
+        if(err){
+            console.log(err);
+            return;
+        }
+
+        newContent = data.replace(item + '\r\n', "");
+
+        fs.writeFile(fileUpdate, newContent, (err) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+        });
+
+        mainWindow.webContents.send('item:refreshRegTips');
+
+    });
+
     deleteTipWindow.close();
 
 })
 
-ipcMain.on('item:deleteTipAbort', function (e, item) {
+ipcMain.on('item:deleteTipAbort', function (e) {
 
     deleteTipWindow.close();
 
@@ -655,7 +739,7 @@ function openNewNote(item) {
     openNoteWindow = new BrowserWindow({
         width: 800,
         height: 690,
-        title: 'Add new link',
+        title: 'Add new note',
         webPreferences: {
             nodeIntegration: true
         }

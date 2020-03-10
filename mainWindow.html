@@ -136,11 +136,28 @@
 			padding: 10px;
         }
 
+        .tipsColumnRightTitle {
+            float: top;
+            width: 100%;
+            height: 5%;
+            text-align: center;
+            font-size: 22px;
+            color: blue;
+            background-color: whitesmoke;
+        }
+
+        .tipTitle {
+            font-size: 22px;
+            color: grey;
+
+        }
+
         .tipsColumnRightTop {
             float: top;
             width: 100%;
-            height: 70%;
+            height: 65%;
             color: blue;
+            background-color: whitesmoke;
         }
 
         .tipsColumnRightBottom {
@@ -289,9 +306,10 @@
         </div>
 
         <div id="tips_columnTips2" class="tipsColumnRight">
-            <div id="tips_columnTips3" class="tipsColumnRightTop" style="display: none;">
+            <div id="tips_columnTips3" class="tipsColumnRightTitle"> Tip : <label id="tipSelected" class="tipTitle"></label><p/></div> 
+            <div id="tips_columnTips4" class="tipsColumnRightTop" style="display: none;">
             </div>
-            <div id="tips_columnTips4" class="tipsColumnRightBottom" style="display: none;">
+            <div id="tips_columnTips5" class="tipsColumnRightBottom" style="display: none;">
             </div>
         </div>
 
@@ -645,6 +663,8 @@
 
             document.getElementById("tips_columnTips").style.display = "block";
 
+            document.getElementById("tips_columnTips3").style.display = "none";
+
             document.getElementById("notes_column").style.display = "none";
 
             ulRegTips.innerHTML = '';
@@ -676,7 +696,7 @@
             const aRegTipsB1 = document.createElement('a');
             aRegTipsB1.href = '#';
             aRegTipsB1.onclick = function () {
-                alert("Isto é um exemplo!");
+                ipcRenderer.send('item:openOldTip', item);
             }
             aRegTipsB1.appendChild(liRegTipsB1);
 
@@ -688,7 +708,7 @@
             aRegTipsB2.href = '#';
             aRegTipsB2.onclick = function () {
             
-              ipcRenderer.send('item:deleteTip', '');
+              ipcRenderer.send('item:deleteTip', item);
                 
             }
             aRegTipsB2.appendChild(liRegTipsB2);
@@ -700,18 +720,15 @@
             const aRegTipsB3 = document.createElement('a');
             aRegTipsB3.href = '#';
             aRegTipsB3.onclick = function () {
-			
 
 				filePath = process.cwd() + '\\myFiles\\myTips\\' + item + '\\' + item + '_File.txt';
 				
-				// alert("File to read is " + filePath);
-				
 				const data = fs.readFileSync(filePath, 'utf8');
-				
-				// alert("Data in the File is " + data);
-				
-				document.getElementById("tips_columnTips3").innerHTML = data;
-				document.getElementById("tips_columnTips3").style.display = "block";
+               
+				document.getElementById("tipSelected").innerHTML = item;
+                document.getElementById("tips_columnTips4").innerHTML = data;
+                document.getElementById("tips_columnTips3").style.display = "block";
+				document.getElementById("tips_columnTips4").style.display = "block";
 
             }
             aRegTipsB3.appendChild(liRegTipsB3);
@@ -732,6 +749,23 @@
             ulRegTips.appendChild(liRegTips);
 
         });
+
+        function myTipsFunction() {
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById("myTipsInput");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("myTipsUL");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("div")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
 
         /* ============================================================ */
         /* ======================= Links Logic ======================== */
